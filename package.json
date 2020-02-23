@@ -1,0 +1,30 @@
+{
+  "name": "pharmaciesonduty",
+  "version": "1.0.0",
+  "description": "Pharmacies on Duty API for Istanbul",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest --testTimeout=10000"
+  },
+  "author": "Halil Ibrahim Durmus",
+  "license": "ISC",
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "verbose": true
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "config": "^3.2.5",
+    "express": "^4.17.1",
+    "got": "^10.5.5",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.0",
+    "jest": "^25.1.0",
+    "supertest": "^4.0.2"
+  }
+}
