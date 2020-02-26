@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var districts_controller = require('../districts/districtsController');
+var districtsController = require('../districts/districts.controller');
 
 // GET request for listing Districts of Istanbul.
-router.get('/', districts_controller.getDistricts);
+router.get('/', districtsController.getDistricts);
 
 module.exports = router;

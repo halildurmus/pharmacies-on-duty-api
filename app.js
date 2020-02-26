@@ -1,9 +1,9 @@
 const config = require('config');
 const serverConfig = config.get('serverConfig');
 const express = require('express');
-const indexRouter = require('./index/indexRoute');
-const districtsRouter = require('./districts/districtsRoute');
-const pharmaciesRouter = require('./pharmacies/pharmaciesRoute');
+const indexRouter = require('./index/index.route');
+const districtsRouter = require('./districts/districts.route');
+const pharmaciesRouter = require('./pharmacies/pharmacies.route');
 const app = express();
 const router = express.Router();
 
