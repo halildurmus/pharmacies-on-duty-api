@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>{{title}}</title>
+    <link href="/css/styles.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="main-content">
+        {{>header}}
+
+        <p style="color: #666">Get pharmacies on duty for any district in Istanbul!</p>
+        <form>
+                <select class="select-css" id="districts" name="districts" onchange="getPharmacies('istanbul')" style="min-width: 45%; width: 45%;">
+                    <option value="" disabled selected>Select a district</option>
+                </select>
+        </form>
+
+        <div id="loader" class="center" style="visibility: hidden"></div>
+        <p id="error-message"></p>
+        <p id="pharmacies"></p>
+    </div>
+
+    {{>footer}}
+
+    <script type="text/javascript">
+        (function() {
+            const districts = [
+                { eng: 'Adalar', district: 'Adalar' },
+                { eng: 'Arnavutkoy', district: 'Arnavutköy' },
+                { eng: 'Atasehir', district: 'Ataşehir' },
+                { eng: 'Avcilar', district: 'Avcılar' },
+                { eng: 'Bagcilar', district: 'Bağcılar' },
+                { eng: 'Bahcelievler', district: 'Bahçelievler' },
+                { eng: 'Bakirkoy', district: 'Bakırköy' },
+                { eng: 'Basaksehir', district: 'Başakşehir' },
+                { eng: 'Bayrampasa', district: 'Bayrampaşa' },
+                { eng: 'Besiktas', district: 'Beşiktaş' },
+                { eng: 'Beykoz', district: 'Beykoz' },
+                { eng: 'Beylikduzu', district: 'Beylikdüzü' },
+                { eng: 'Beyoglu', district: 'Beyoğlu' },
+                { eng: 'Buyukcekmece', district: 'Büyükçekmece' },
+                { eng: 'Catalca', district: 'Çatalca' },
+                { eng: 'Cekmekoy', district: 'Çekmeköy' },
+                { eng: 'Esenler', district: 'Esenler' },
+                { eng: 'Esenyurt', district: 'Esenyurt' },
+                { eng: 'Eyup', district: 'Eyüp' },
+                { eng: 'Fatih', district: 'Fatih' },
+                { eng: 'Gaziosmanpasa', district: 'Gaziosmanpaşa' },
+                { eng: 'Gungoren', district: 'Güngören' },
+                { eng: 'Kadikoy', district: 'Kadıköy' },
+                { eng: 'Kagithane', district: 'Kağıthane' },
+                { eng: 'Kartal', district: 'Kartal' },
+                { eng: 'Kucukcekmece', district: 'Küçükçekmece' },
+                { eng: 'Maltepe', district: 'Maltepe' },
+                { eng: 'Pendik', district: 'Pendik' },
+                { eng: 'Sancaktepe', district: 'Sancaktepe' },
+                { eng: 'Sariyer', district: 'Sarıyer' },
+                { eng: 'Silivri', district: 'Silivri' },
+                { eng: 'Sultanbeyli', district: 'Sultanbeyli' },
+                { eng: 'Sultangazi', district: 'Sultangazi' },
+                { eng: 'Sile', district: 'Şile' },
+                { eng: 'Sisli', district: 'Şişli' },
+                { eng: 'Tuzla', district: 'Tuzla' },
+                { eng: 'Umraniye', district: 'Ümraniye' },
+                { eng: 'Uskudar', district: 'Üsküdar' },
+                { eng: 'Zeytinburnu', district: 'Zeytinburnu' },
+            ]
+            const elm = document.getElementById('districts')
+            const df = document.createDocumentFragment()
+            for (let i = 0; i < districts.length; i++) {
+                const option = document.createElement('option')
+                option.value = districts[i].eng
+                option.appendChild(document.createTextNode(districts[i].district))
+                df.appendChild(option)
+            }
+            elm.appendChild(df)
+        }());
+    </script>
+    <script src="/js/app.js"></script>
+</body>
+
+</html>

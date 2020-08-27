@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>{{title}}</title>
+    <link href="/css/styles.css" rel="stylesheet" >
+</head>
+
+<body>
+    <div class="main-content">
+        {{>header}}
+        <p style="color: #666">Get pharmacies on duty for any area in Izmir!</p>
+        <form>
+            <select class="select-css" id="areas" name="areas" onchange="getPharmacies('izmir')" style="min-width: 45%; width: 45%;">
+                <option value="" disabled selected>Select an area</option>
+            </select>
+        </form>
+
+        <div id="loader" class="center" style="visibility: hidden"></div>
+        <p id="error-message"></p>
+        <p id="pharmacies"></p>
+    </div>
+    
+    {{>footer}}
+
+    <script type="text/javascript">
+        (function() {
+            const areas = [
+                { id: 780, name: 'ALİAĞA' },
+                { id: 751, name: 'ALSANCAK' },
+                { id: 752, name: 'ALSANCAK-BASMANE' },
+                { id: 579, name: 'ALTINDAĞ' },
+                { id: 580, name: 'ATATÜRK-OSMANGAZİ' },
+                { id: 782, name: 'AYRANCILAR' },
+                { id: 581, name: 'BALÇOVA' },
+                { id: 582, name: 'BASIN SİTESİ' },
+                { id: 783, name: 'BAYINDIR' },
+                { id: 583, name: 'BAYRAKLI' },
+                { id: 784, name: 'BERGAMA' },
+                { id: 785, name: 'BEYDAĞ' },
+                { id: 584, name: 'BORNOVA 1' },
+                { id: 585, name: 'BORNOVA 2' },
+                { id: 586, name: 'BORNOVA 3' },
+                { id: 587, name: 'BOZYAKA' },
+                { id: 588, name: 'BUCA 1' },
+                { id: 589, name: 'BUCA 2' },
+                { id: 578, name: 'ÇAMDİBİ' },
+                { id: 1455, name: 'ÇANDARLI' },
+                { id: 787, name: 'ÇEŞME' },
+                { id: 591, name: 'ÇİĞLİ' },
+                { id: 788, name: 'DİKİLİ' },
+                { id: 789, name: 'ESKİ FOÇA' },
+                { id: 592, name: 'ESKİİZMİR-CENNETÇEŞME' },
+                { id: 593, name: 'EŞREFPAŞA ' },
+                { id: 595, name: 'EVKA 1' },
+                { id: 596, name: 'GAZİEMİR' },
+                { id: 597, name: 'GEDİZ' },
+                { id: 688, name: 'GÜLTEPE' },
+                { id: 1454, name: 'GÜMÜLDÜR-ÖZDERE' },
+                { id: 750, name: 'GÜMÜŞPALA' },
+                { id: 753, name: 'GÜZELBAHÇE' },
+                { id: 754, name: 'HATAY' },
+                { id: 755, name: 'İNCİRALTI' },
+                { id: 756, name: 'KARABAĞLAR' },
+                { id: 790, name: 'KARABURUN' },
+                { id: 757, name: 'KARŞIYAKA 1' },
+                { id: 768, name: 'KARŞIYAKA 2' },
+                { id: 769, name: 'KARŞIYAKA 3' },
+                { id: 770, name: 'KARŞIYAKA 4' },
+                { id: 791, name: 'KEMALPAŞA' },
+                { id: 792, name: 'KINIK' },
+                { id: 793, name: 'KİRAZ' },
+                { id: 794, name: 'MENDERES' },
+                { id: 795, name: 'MENEMEN' },
+                { id: 772, name: 'MİTHATPAŞA' },
+                { id: 796, name: 'MORDOĞAN' },
+                { id: 773, name: 'NARLIDERE' },
+                { id: 797, name: 'ÖDEMİŞ' },
+                { id: 774, name: 'PINARBAŞI' },
+                { id: 775, name: 'SARNIÇ' },
+                { id: 799, name: 'SEFERİHİSAR' },
+                { id: 800, name: 'SELÇUK' },
+                { id: 776, name: 'ŞİRİNYER' },
+                { id: 802, name: 'TİRE' },
+                { id: 803, name: 'TORBALI' },
+                { id: 801, name: 'URLA' },
+                { id: 777, name: 'ÜÇYOL' },
+                { id: 804, name: 'YENİ FOÇA' },
+                { id: 805, name: 'YENİ ŞAKRAN' },
+                { id: 778, name: 'YENİŞEHİR' },
+                { id: 779, name: 'YEŞİLYURT' },
+            ]
+            const elm = document.getElementById('areas')
+            const df = document.createDocumentFragment()
+            for (let i = 0; i < areas.length; i++) {
+                const option = document.createElement('option')
+                option.value = areas[i].id
+                option.appendChild(document.createTextNode(areas[i].name))
+                df.appendChild(option)
+            }
+            elm.appendChild(df)
+        }());
+    </script>
+    <script src="/js/app.js"></script>
+</body>
+
+</html>
