@@ -3,7 +3,10 @@ const { flushCache } = require('../../utils/cache')
 const request = require('supertest')
 const app = require('../../app')
 
-beforeAll(async () => await getIstanbul())
+beforeAll(async () => {
+	flushCache()
+	await getIstanbul()
+})
 
 afterAll(() => flushCache())
 
