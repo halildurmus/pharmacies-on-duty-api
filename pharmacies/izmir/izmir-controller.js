@@ -5,7 +5,7 @@ const { redis } = require('../../utils/cache')
 
 // Gets the pharmacies on duty data for provided area code in Izmir from cache.
 const getPharmacies = async (areaCode) => {
-	const data = await redis.get(config.cacheKeyPrefixIzmir + areaCode)
+	const data = await redis.get(config.redisKeyPrefixIzmir + areaCode)
 	const parsedData = JSON.parse(data)
 
 	if (!data) {

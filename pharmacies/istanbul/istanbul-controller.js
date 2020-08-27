@@ -1,10 +1,10 @@
-const { cacheKeyPrefixIstanbul } = require('../../config')
+const { redisKeyPrefixIstanbul } = require('../../config')
 const APIError = require('../../utils/APIError')
 const { redis } = require('../../utils/cache')
 
 // Gets the pharmacies on duty data for provided district in Istanbul from cache.
 const getPharmacies = async (district) => {
-	const data = await redis.get(cacheKeyPrefixIstanbul + district)
+	const data = await redis.get(redisKeyPrefixIstanbul + district)
 	const parsedData = JSON.parse(data)
 
 	if (!data) {

@@ -73,7 +73,7 @@ const getIzmir = async () => {
 				({ areaCode }) => areaCode === areas[i].code
 			)
 			redis.set(
-				config.cacheKeyPrefixIzmir + areas[i].code,
+				config.redisKeyPrefixIzmir + areas[i].code,
 				JSON.stringify(pharmacies),
 				'ex',
 				30 * 60

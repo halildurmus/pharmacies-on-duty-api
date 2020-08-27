@@ -1,7 +1,7 @@
 {
-  "name": "pharmaciesondutyapi",
+  "name": "pharmacies-on-duty-api",
   "version": "1.0.0",
-  "description": "Pharmacies on Duty API for Istanbul",
+  "description": "Pharmacies on Duty API for Istanbul and Izmir",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

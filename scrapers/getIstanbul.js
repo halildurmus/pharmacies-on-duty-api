@@ -70,7 +70,7 @@ const getIstanbul = async () => {
 			)
 			redis
 				.set(
-					config.cacheKeyPrefixIstanbul + districts[i].eng.toLowerCase(),
+					config.redisKeyPrefixIstanbul + districts[i].eng.toLowerCase(),
 					JSON.stringify(pharmacies),
 					'ex',
 					30 * 60
