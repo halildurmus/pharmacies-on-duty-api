@@ -6,7 +6,7 @@ const hbs = require('hbs')
 const homeRouter = require('./home/home-route')
 const istanbulRouter = require('./pharmacies/istanbul/istanbul-route')
 const izmirRouter = require('./pharmacies/izmir/izmir-route')
-const error = require('./middlewares/error')
+const { error } = require('./middlewares')
 const app = express()
 
 app.use(cors(corsOptions))
@@ -26,30 +26,17 @@ hbs.registerPartials(partialsPath)
 // Setup static directory to serve.
 app.use(express.static(publicDirectoryPath))
 
-// Returns with code 503 for all of the requests.
-// app.use((req, res, next) => {
-// 	res.status(503).send('Site is currently down. Check back soon!')
-// })
-
-// Disables GET requests.
-// app.use((req, res, next) => {
-// 	if (req.method === 'GET') {
-// 		return res.send('GET requests are disabled')
-// 	}
-// 	next()
-// })
-
 app.use(homeRouter)
 app.use(apiPrefix, istanbulRouter)
 app.use(apiPrefix, izmirRouter)
 
-// if error is not an instanceOf APIError, convert it.
+// If the error is not an instanceOf APIError, convert it.
 app.use(error.converter)
 
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler.
 app.use(error.notFound)
 
-// error handler, send stacktrace only during development
+// Error handler, send stacktrace only during development.
 app.use(error.handler)
 
 module.exports = app

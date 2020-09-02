@@ -1,8 +1,8 @@
 const express = require('express')
-const { catchAsync } = require('../../middlewares/catchAsync')
 const router = express.Router()
 const { areas } = require('./areas')
-const { getPharmacies } = require('./izmir-controller')
+const { catchAsync } = require('../../middlewares')
+const getPharmacies = require('./izmir-controller')
 
 // GET request for listing the areas in Izmir.
 router.get('/pharmacies/izmir/areas', async (req, res) => {

@@ -1,5 +1,5 @@
 const config = require('./config')
-const logger = require('./utils/logger')
+const { logger } = require('./utils')
 const app = require('./app')
 const port = config.serverPort || 3000
 

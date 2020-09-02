@@ -1,7 +1,6 @@
 const config = require('../../config')
-const APIError = require('../../utils/APIError')
 const { areas } = require('./areas')
-const { redis } = require('../../utils/cache')
+const { APIError, redis } = require('../../utils')
 
 // Gets the pharmacies on duty data for provided area code in Izmir from cache.
 const getPharmacies = async (areaCode) => {
@@ -28,4 +27,4 @@ const getPharmacies = async (areaCode) => {
 	return parsedData
 }
 
-module.exports = { getPharmacies }
+module.exports = getPharmacies

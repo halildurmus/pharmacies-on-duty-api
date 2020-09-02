@@ -1,14 +1,14 @@
-const { getIstanbul } = require('../../scrapers/getIstanbul')
-const { flushCache } = require('../../utils/cache')
 const request = require('supertest')
+const getIstanbul = require('../../scrapers/getIstanbul')
+const { redis } = require('../../utils')
 const app = require('../../app')
 
 beforeAll(async () => {
-	flushCache()
+	redis.flushall()
 	await getIstanbul()
 })
 
-afterAll(() => flushCache())
+afterAll(() => redis.flushall())
 
 describe('API Endpoints for Istanbul', () => {
 	it('should list the districts in Istanbul', async () => {

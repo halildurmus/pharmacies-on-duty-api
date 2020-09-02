@@ -1,9 +1,8 @@
-const config = require('../config')
-const logger = require('../utils/logger')
+const { redisKeyPrefixIstanbul } = require('../config')
+const { districts } = require('../pharmacies/istanbul/districts')
+const { logger, redis } = require('../utils')
 const cheerio = require('cheerio')
 const got = require('got')
-const { redis } = require('../utils/cache')
-const { districts } = require('../pharmacies/istanbul/districts')
 
 const getHToken = async () => {
 	try {
@@ -70,7 +69,7 @@ const getIstanbul = async () => {
 			)
 			redis
 				.set(
-					config.redisKeyPrefixIstanbul + districts[i].eng.toLowerCase(),
+					redisKeyPrefixIstanbul + districts[i].eng.toLowerCase(),
 					JSON.stringify(pharmacies),
 					'ex',
 					30 * 60
@@ -92,4 +91,4 @@ const getIstanbul = async () => {
 	}
 }
 
-module.exports = { getIstanbul }
+module.exports = getIstanbul

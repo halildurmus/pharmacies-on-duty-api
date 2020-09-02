@@ -1,6 +1,5 @@
 const { redisKeyPrefixIstanbul } = require('../../config')
-const APIError = require('../../utils/APIError')
-const { redis } = require('../../utils/cache')
+const { APIError, redis } = require('../../utils')
 
 // Gets the pharmacies on duty data for provided district in Istanbul from cache.
 const getPharmacies = async (district) => {
@@ -29,4 +28,4 @@ const getPharmacies = async (district) => {
 	return parsedData
 }
 
-module.exports = { getPharmacies }
+module.exports = getPharmacies

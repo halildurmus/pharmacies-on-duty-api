@@ -1,14 +1,14 @@
-const { getIzmir } = require('../../scrapers/getIzmir')
-const { flushCache } = require('../../utils/cache')
 const request = require('supertest')
+const getIzmir = require('../../scrapers/getIzmir')
+const { redis } = require('../../utils')
 const app = require('../../app')
 
 beforeAll(async () => {
-	flushCache()
+	redis.flushall()
 	await getIzmir()
 })
 
-afterAll(() => flushCache())
+afterAll(() => redis.flushall())
 
 describe('API Endpoints for Izmir', () => {
 	it('should list the areas in Izmir', async () => {

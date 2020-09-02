@@ -1,4 +1,4 @@
-const config = require('../config')
+const { nodeEnv } = require('../config')
 const { createLogger, format, transports } = require('winston')
 const { colorize, combine, json, printf, timestamp } = format
 
@@ -10,7 +10,7 @@ const logger = createLogger({
 		}),
 		json()
 	),
-	defaultMeta: { service: 'pharmacies-service' },
+	defaultMeta: { service: 'covid-19-service' },
 	transports: [
 		// - Write all logs with level `error` and below to `error.log`
 		// - Write all logs with level `info` and below to `combined.log`
@@ -28,7 +28,7 @@ const myFormat = printf(({ level, message, service, timestamp }) => {
 })
 
 // If we're not in production then log to the `console`.
-if (config.nodeEnv !== 'production') {
+if (nodeEnv !== 'production') {
 	logger.add(
 		new transports.Console({
 			format: combine(timestamp(), colorize(), myFormat),

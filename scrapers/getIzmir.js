@@ -1,13 +1,11 @@
-const config = require('../config')
-const logger = require('../utils/logger')
+const { redisKeyPrefixIzmir } = require('../config')
 const { areas } = require('../pharmacies/izmir/areas')
+const { logger, redis } = require('../utils')
 const cheerio = require('cheerio')
 const got = require('got')
-const { redis } = require('../utils/cache')
 
 function fillResult(html) {
 	const pharmacies = []
-
 	const $ = cheerio.load(html)
 	$('tbody')
 		.children()
@@ -73,7 +71,7 @@ const getIzmir = async () => {
 				({ areaCode }) => areaCode === areas[i].code
 			)
 			redis.set(
-				config.redisKeyPrefixIzmir + areas[i].code,
+				redisKeyPrefixIzmir + areas[i].code,
 				JSON.stringify(pharmacies),
 				'ex',
 				30 * 60
@@ -84,4 +82,4 @@ const getIzmir = async () => {
 	}
 }
 
-module.exports = { getIzmir }
+module.exports = getIzmir

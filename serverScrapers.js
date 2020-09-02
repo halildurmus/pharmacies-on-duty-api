@@ -1,5 +1,5 @@
-const { getIstanbul } = require('./scrapers/getIstanbul')
-const { getIzmir } = require('./scrapers/getIzmir')
+const getIstanbul = require('./scrapers/getIstanbul')
+const getIzmir = require('./scrapers/getIzmir')
 
 // Executes the scrapers for Istanbul and Izmir.
 getIstanbul().then()

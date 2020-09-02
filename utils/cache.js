@@ -8,6 +8,4 @@ const redis = new Redis({
 	db: 0,
 })
 
-const flushCache = () => redis.flushall()
-
-module.exports = { redis, flushCache }
+module.exports = redis
