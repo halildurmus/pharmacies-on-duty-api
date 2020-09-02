@@ -10,7 +10,7 @@ const logger = createLogger({
 		}),
 		json()
 	),
-	defaultMeta: { service: 'covid-19-service' },
+	defaultMeta: { service: 'pharmacies-service' },
 	transports: [
 		// - Write all logs with level `error` and below to `error.log`
 		// - Write all logs with level `info` and below to `combined.log`
