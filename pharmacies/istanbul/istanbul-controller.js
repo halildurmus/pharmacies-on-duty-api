@@ -3,8 +3,8 @@ const { APIError, redis } = require('../../utils')
 
 /**
  * Returns the pharmacies on duty data for provided district in Istanbul as JSON.
- * @param 	{string} district district name
- * @returns {Object}
+ * @param		{string} district district name
+ * @returns	{Object}
  */
 const getPharmacies = async (district) => {
 	// Fetches the pharmacies on duty data for provided district from redis.
