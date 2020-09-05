@@ -4,6 +4,8 @@ const { logger, redis } = require('../utils')
 const cheerio = require('cheerio')
 const got = require('got')
 
+// Scrapes the h token which is needed for scraping the pharmacies on duty
+// for Istanbul data.
 const getHToken = async () => {
 	try {
 		const url = 'https://www.istanbuleczaciodasi.org.tr/nobetci-eczane/'
@@ -11,7 +13,7 @@ const getHToken = async () => {
 
 		const $ = cheerio.load(response.body)
 		const h = $('input#h').attr('value')
-		logger.info('Successfully fetched the h token.')
+		logger.info('Fetched the h token.')
 
 		return h
 	} catch (err) {
@@ -19,6 +21,39 @@ const getHToken = async () => {
 	}
 }
 
+/**
+ * Parses the provided JSON data.
+ * @param 	{Object} 	data HTML data.
+ * @returns {Array} 	Pharmacies on duty for Istanbul.
+ */
+const fillResult = (data) => {
+	const { eczaneler } = data
+	const pharmaciesData = eczaneler.filter(({ il }) => il === 'İstanbul')
+
+	const pharmacies = []
+	pharmaciesData.forEach((obj) => {
+		const district = obj.ilce
+		const name = obj.eczane_ad
+		const phone = obj.eczane_tel
+		const address = obj.mahalle + ' ' + obj.cadde_sokak + ' ' + obj.bina_kapi
+		const addressDescription = obj.tarif
+		const lat = obj.lat
+		const lon = obj.lng
+
+		pharmacies.push({
+			district,
+			name,
+			phone,
+			address,
+			address_description: addressDescription,
+			coordinates: { lat, lon },
+		})
+	})
+
+	return pharmacies
+}
+
+// Scrapes the pharmacies on duty for Istanbul data and saves it to redis.
 const getIstanbul = async () => {
 	try {
 		const h = await getHToken()
@@ -38,35 +73,19 @@ const getIstanbul = async () => {
 		const body = `jx=1&islem=get_eczane_markers&h=${h}`
 		const response = await got.post(url, { headers, body })
 
-		const { eczaneler } = JSON.parse(response.body)
-		const data = eczaneler.filter(({ il }) => il === 'İstanbul')
+		const data = fillResult(JSON.parse(response.body))
 
-		const formattedData = []
-		data.forEach((obj) => {
-			const district = obj.ilce
-			const name = obj.eczane_ad
-			const phone = obj.eczane_tel
-			const address = obj.mahalle + ' ' + obj.cadde_sokak + ' ' + obj.bina_kapi
-			const addressDescription = obj.tarif
-			const lat = obj.lat
-			const lon = obj.lng
-
-			formattedData.push({
-				district,
-				name,
-				phone,
-				address,
-				address_description: addressDescription,
-				coordinates: { lat, lon },
-			})
-		})
-
-		logger.info('Successfully updated the Istanbul data.')
+		if (!data || !data.length) {
+			logger.error(`Couldn't parse the Istanbul data.`)
+			return
+		}
 
 		for (let i = 0; i < districts.length; i++) {
-			const pharmacies = formattedData.filter(
+			const pharmacies = data.filter(
 				({ district }) => district === districts[i].district
 			)
+			// Saves the pharmacies on duty for Istanbul data to redis.
+			// The data expires in 30 minutes.
 			redis
 				.set(
 					redisKeyPrefixIstanbul + districts[i].eng.toLowerCase(),
@@ -76,6 +95,8 @@ const getIstanbul = async () => {
 				)
 				.catch((err) => logger.error(err))
 		}
+
+		logger.info('Updated the Istanbul data.')
 	} catch (err) {
 		if (err.name === 'SyntaxError') {
 			logger.error(

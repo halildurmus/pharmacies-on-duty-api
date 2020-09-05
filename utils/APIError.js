@@ -1,4 +1,11 @@
+// Custom Error class.
 class APIError extends Error {
+	/**
+	 * Default constructor.
+	 * @param {int} 		statusCode 			HTTP status code.
+	 * @param	{string}	message					Error message.
+	 * @param {boolean}	[isOperational] Defaults to true.
+	 */
 	constructor(statusCode, message, isOperational) {
 		super(message)
 

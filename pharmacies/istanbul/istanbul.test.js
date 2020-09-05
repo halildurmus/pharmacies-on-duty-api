@@ -16,6 +16,7 @@ describe('API Endpoints for Istanbul', () => {
 			.get(`${process.env.API_PREFIX}/pharmacies/istanbul/districts`)
 			.expect(200)
 		expect(res.body).toHaveProperty('districts')
+		expect(Object.keys(res.body.districts).length).toEqual(39)
 	})
 
 	it('should list the pharmacies on duty in Kadıköy', async () => {
@@ -30,7 +31,9 @@ describe('API Endpoints for Istanbul', () => {
 			.get(`${process.env.API_PREFIX}/pharmacies/istanbul/Cankaya`)
 			.expect(400)
 		expect(res.body).toHaveProperty('status')
+		expect(res.body.status).toEqual('fail')
 		expect(res.body).toHaveProperty('message')
+		expect(res.body.message).toEqual('You need to provide a valid district.')
 	})
 
 	it('should respond with status code 400 if no district is provided', async () => {
@@ -38,6 +41,8 @@ describe('API Endpoints for Istanbul', () => {
 			.get(`${process.env.API_PREFIX}/pharmacies/istanbul`)
 			.expect(400)
 		expect(res.body).toHaveProperty('status')
+		expect(res.body.status).toEqual('fail')
 		expect(res.body).toHaveProperty('message')
+		expect(res.body.message).toEqual('You need to provide a district.')
 	})
 })

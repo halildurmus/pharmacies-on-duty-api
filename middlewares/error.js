@@ -1,8 +1,6 @@
-const { apiPrefix } = require('../config')
+const { apiPrefix, nodeEnv } = require('../config')
+const { APIError, logger } = require('../utils')
 const httpStatus = require('http-status')
-const APIError = require('../utils/APIError')
-const logger = require('../utils/logger')
-const { nodeEnv } = require('../config')
 
 const sendErrorDev = (err, res) => {
 	logger.error('ERROR 💥: ', err)
@@ -16,19 +14,19 @@ const sendErrorDev = (err, res) => {
 }
 
 const sendErrorProd = (err, res) => {
-	// Operational, trusted error: send message to client
+	// Operational, trusted error: sends message to client.
 	if (err.isOperational) {
 		res.status(err.statusCode).json({
 			status: err.status,
 			message: err.message,
 		})
 
-		// Programming or other unknown error
+		// Programming or other unknown error.
 	} else if (err.isOperational === false) {
-		// 1) Log error
+		// 1) Logs error.
 		logger.error('ERROR 💥: ', err)
 
-		// 2) Send generic message
+		// 2) Sends generic response.
 		res.status(500).json({
 			status: 'error',
 			message: 'Something went very wrong!',
@@ -36,6 +34,7 @@ const sendErrorProd = (err, res) => {
 	}
 }
 
+// Custom error handler.
 exports.handler = (err, req, res, next) => {
 	err.statusCode = err.statusCode || 500
 	err.status = err.status || 'error'
@@ -47,10 +46,7 @@ exports.handler = (err, req, res, next) => {
 	}
 }
 
-/**
- * If error is not an instanceOf APIError, convert it.
- * @public
- */
+// If the error is not an instanceOf APIError, convert it.
 exports.converter = (err, req, res, next) => {
 	let convertedError = err
 
@@ -61,10 +57,7 @@ exports.converter = (err, req, res, next) => {
 	return exports.handler(convertedError, req, res)
 }
 
-/**
- * Catch 404 and forward to error handler
- * @public
- */
+// Catch 404 and forward to error handler
 exports.notFound = (req, res, next) => {
 	const statusCode = httpStatus.NOT_FOUND
 	const message = httpStatus['404']

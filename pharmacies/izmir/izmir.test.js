@@ -16,6 +16,7 @@ describe('API Endpoints for Izmir', () => {
 			.get(`${process.env.API_PREFIX}/pharmacies/izmir/areas`)
 			.expect(200)
 		expect(res.body).toHaveProperty('areas')
+		expect(Object.keys(res.body.areas).length).toEqual(63)
 	})
 
 	it('should list the pharmacies on duty in Alsancak', async () => {
@@ -31,7 +32,9 @@ describe('API Endpoints for Izmir', () => {
 			.get(`${process.env.API_PREFIX}/pharmacies/izmir/7511`)
 			.expect(400)
 		expect(res.body).toHaveProperty('status')
+		expect(res.body.status).toEqual('fail')
 		expect(res.body).toHaveProperty('message')
+		expect(res.body.message).toEqual('You need to provide a valid area code.')
 	})
 
 	it('should respond with status code 400 if no area code is provided', async () => {
@@ -39,6 +42,8 @@ describe('API Endpoints for Izmir', () => {
 			.get(`${process.env.API_PREFIX}/pharmacies/izmir`)
 			.expect(400)
 		expect(res.body).toHaveProperty('status')
+		expect(res.body.status).toEqual('fail')
 		expect(res.body).toHaveProperty('message')
+		expect(res.body.message).toEqual('You need to provide an area code.')
 	})
 })

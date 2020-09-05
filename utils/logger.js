@@ -12,8 +12,8 @@ const logger = createLogger({
 	),
 	defaultMeta: { service: 'pharmacies-service' },
 	transports: [
-		// - Write all logs with level `error` and below to `error.log`
-		// - Write all logs with level `info` and below to `combined.log`
+		// - Write all logs with level `error` and below to `error.log`.
+		// - Write all logs with level `info` and below to `combined.log`.
 		new transports.File({
 			filename: './logs/error.log',
 			level: 'error',
@@ -27,7 +27,7 @@ const myFormat = printf(({ level, message, service, timestamp }) => {
 	return `${timestamp} ${level}: ${message} [${service}]`
 })
 
-// If we're not in production then log to the `console`.
+// Log to the `console` if we're not in production.
 if (nodeEnv !== 'production') {
 	logger.add(
 		new transports.Console({

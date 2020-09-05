@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start:cluster": "cservice index.js --accessKey 123456",
-    "start:scraper": "node serverScrapers.js",
+    "start:scraper": "node scrapers.js",
     "start:devserver": "nodemon index.js",
     "start:dev": "concurrently --kill-others-on-fail --kill-others \"npm:start:scraper\" \"npm:start:devserver\"",
     "test": "jest --watchAll --runInBand"
@@ -18,8 +17,8 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
-    "cluster-service": "^2.1.3",
     "cors": "^2.8.5",
+    "cron": "^1.8.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "got": "^10.7.0",

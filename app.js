@@ -13,30 +13,27 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// Define paths for express config.
+// Defines paths for express config.
 const publicDirectoryPath = './public'
 const viewsPath = './templates/views'
 const partialsPath = './templates/partials'
-
-// Setup handlebars engine and views location.
+// Setups handlebars engine and views location.
 app.set('view engine', 'hbs')
 app.set('views', viewsPath)
 hbs.registerPartials(partialsPath)
-
-// Setup static directory to serve.
+// Setups static directory to serve.
 app.use(express.static(publicDirectoryPath))
 
+// Routes
 app.use(homeRouter)
 app.use(apiPrefix, istanbulRouter)
 app.use(apiPrefix, izmirRouter)
 
 // If the error is not an instanceOf APIError, convert it.
 app.use(error.converter)
-
 // Catch 404 and forward to error handler.
 app.use(error.notFound)
-
-// Error handler, send stacktrace only during development.
+// Use custom error handler, send stacktrace only during development.
 app.use(error.handler)
 
 module.exports = app

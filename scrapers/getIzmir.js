@@ -4,6 +4,11 @@ const { logger, redis } = require('../utils')
 const cheerio = require('cheerio')
 const got = require('got')
 
+/**
+ * Parses the provided HTML data.
+ * @param 	html HTML data.
+ * @returns {Array} Pharmacies on duty for Izmir.
+ */
 function fillResult(html) {
 	const pharmacies = []
 	const $ = cheerio.load(html)
@@ -52,6 +57,7 @@ function fillResult(html) {
 	return pharmacies
 }
 
+// Scrapes the pharmacies on duty for Izmir data and saves it to redis.
 const getIzmir = async () => {
 	try {
 		const url = 'https://www.izmir.bel.tr/tr/NobetciEczane/27'
@@ -60,16 +66,16 @@ const getIzmir = async () => {
 		const data = fillResult(response.body)
 
 		if (!data || !data.length) {
-			logger.error(`Couldn't fill the Izmir data.`)
+			logger.error(`Couldn't parse the Izmir data.`)
 			return
 		}
-
-		logger.info('Successfully updated the Izmir data.')
 
 		for (let i = 0; i < areas.length; i++) {
 			const pharmacies = data.filter(
 				({ areaCode }) => areaCode === areas[i].code
 			)
+			// Saves the pharmacies on duty for Izmir data to redis.
+			// The data expires in 30 minutes.
 			redis.set(
 				redisKeyPrefixIzmir + areas[i].code,
 				JSON.stringify(pharmacies),
@@ -77,6 +83,8 @@ const getIzmir = async () => {
 				30 * 60
 			)
 		}
+
+		logger.info('Updated the Izmir data.')
 	} catch (err) {
 		logger.error(`${err} Couldn't fetch the Izmir data.`)
 	}
