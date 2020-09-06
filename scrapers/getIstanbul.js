@@ -1,11 +1,11 @@
 const { redisKeyPrefixIstanbul } = require('../config')
-const { districts } = require('../pharmacies/istanbul/districts')
+const { districts } = require('../cities/istanbul/districts')
 const { logger, redis } = require('../utils')
 const cheerio = require('cheerio')
 const got = require('got')
 
 // Scrapes the h token which is needed for scraping the pharmacies on duty
-// for Istanbul data.
+// in Istanbul data.
 const getHToken = async () => {
 	try {
 		const url = 'https://www.istanbuleczaciodasi.org.tr/nobetci-eczane/'
@@ -24,7 +24,7 @@ const getHToken = async () => {
 /**
  * Parses the provided JSON data.
  * @param 	{Object} 	data HTML data.
- * @returns {Array} 	Pharmacies on duty for Istanbul.
+ * @returns {Array} 	Pharmacies on duty in Istanbul.
  */
 const fillResult = (data) => {
 	const { eczaneler } = data
@@ -53,7 +53,7 @@ const fillResult = (data) => {
 	return pharmacies
 }
 
-// Scrapes the pharmacies on duty for Istanbul data and saves it to redis.
+// Scrapes the pharmacies on duty in Istanbul data and saves it to redis.
 const getIstanbul = async () => {
 	try {
 		const h = await getHToken()
@@ -80,11 +80,28 @@ const getIstanbul = async () => {
 			return
 		}
 
+		// Saves the all pharmacies on duty in Istanbul data to redis.
+		// The data expires in 30 minutes.
+		redis
+			.set(
+				redisKeyPrefixIstanbul + 'all',
+				JSON.stringify(
+					data.sort((a, b) =>
+						a.district.toLocaleUpperCase() < b.district.toLocaleUpperCase()
+							? -1
+							: 1
+					)
+				),
+				'ex',
+				30 * 60
+			)
+			.catch((err) => logger.error(err))
+
 		for (let i = 0; i < districts.length; i++) {
 			const pharmacies = data.filter(
 				({ district }) => district === districts[i].district
 			)
-			// Saves the pharmacies on duty for Istanbul data to redis.
+			// Saves the pharmacies on duty in Istanbul data to redis.
 			// The data expires in 30 minutes.
 			redis
 				.set(

@@ -1,5 +1,5 @@
 const { redisKeyPrefixIzmir } = require('../config')
-const { areas } = require('../pharmacies/izmir/areas')
+const { areas } = require('../cities/izmir/areas')
 const { logger, redis } = require('../utils')
 const cheerio = require('cheerio')
 const got = require('got')
@@ -7,7 +7,7 @@ const got = require('got')
 /**
  * Parses the provided HTML data.
  * @param 	html HTML data.
- * @returns {Array} Pharmacies on duty for Izmir.
+ * @returns {Array} Pharmacies on duty in Izmir.
  */
 function fillResult(html) {
 	const pharmacies = []
@@ -57,7 +57,7 @@ function fillResult(html) {
 	return pharmacies
 }
 
-// Scrapes the pharmacies on duty for Izmir data and saves it to redis.
+// Scrapes the cities on duty in Izmir data and saves it to redis.
 const getIzmir = async () => {
 	try {
 		const url = 'https://www.izmir.bel.tr/tr/NobetciEczane/27'
@@ -70,11 +70,26 @@ const getIzmir = async () => {
 			return
 		}
 
+		// Saves the all pharmacies on duty in Izmir data to redis.
+		// The data expires in 30 minutes.
+		redis
+			.set(
+				redisKeyPrefixIzmir + 'all',
+				JSON.stringify(
+					data.sort((a, b) =>
+						a.area.toLocaleUpperCase() < b.area.toLocaleUpperCase() ? -1 : 1
+					)
+				),
+				'ex',
+				30 * 60
+			)
+			.catch((err) => logger.error(err))
+
 		for (let i = 0; i < areas.length; i++) {
 			const pharmacies = data.filter(
 				({ areaCode }) => areaCode === areas[i].code
 			)
-			// Saves the pharmacies on duty for Izmir data to redis.
+			// Saves the cities on duty in Izmir data to redis.
 			// The data expires in 30 minutes.
 			redis.set(
 				redisKeyPrefixIzmir + areas[i].code,
