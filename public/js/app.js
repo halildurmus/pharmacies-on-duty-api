@@ -9,11 +9,11 @@ function getPharmacies(city) {
 		if (city === 'istanbul') {
 			const district = istanbulSearch.value
 
-			return `http://127.0.0.1:3000/api/v1/pharmacies/istanbul/${district}`
+			return `https://pharmacies-on-duty-api.herokuapp.com/api/v1/pharmacies/istanbul/${district}`
 		} else if (city === 'izmir') {
 			const area = izmirSearch.value
 
-			return `http://127.0.0.1:3000/api/v1/pharmacies/izmir/${area}`
+			return `https://pharmacies-on-duty-api.herokuapp.com/api/v1/pharmacies/izmir/${area}`
 		}
 	}
 
@@ -32,7 +32,7 @@ function getPharmacies(city) {
 				pharmacies.textContent = ''
 				let html = ''
 				data.pharmacies.forEach((pharmacy) => {
-					html += `<div class="card"> 
+					html += `<div class="card">
 									   <h3>${pharmacy.name}</h3>
 									 	 <div class="card-member"><b>Phone:</b>   ${pharmacy.phone} </div>
 									 	 <div class="card-member"><b>Address:</b> ${pharmacy.address} </div>

@@ -1,4 +1,4 @@
-const { apiPrefix } = require('./config')
+const { apiPrefix, swaggerJsonUrl } = require('./config')
 const cors = require('cors')
 const corsOptions = { optionsSuccessStatus: 200 }
 const express = require('express')
@@ -8,6 +8,12 @@ const istanbulRouter = require('./pharmacies/istanbul/istanbul-route')
 const izmirRouter = require('./pharmacies/izmir/izmir-route')
 const { error } = require('./middlewares')
 const app = express()
+const swaggerUi = require('swagger-ui-express')
+const swaggerOptions = {
+	swaggerOptions: {
+		url: swaggerJsonUrl,
+	},
+}
 
 app.use(cors(corsOptions))
 app.use(express.json())
@@ -25,6 +31,7 @@ hbs.registerPartials(partialsPath)
 app.use(express.static(publicDirectoryPath))
 
 // Routes
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, swaggerOptions))
 app.use(homeRouter)
 app.use(apiPrefix, istanbulRouter)
 app.use(apiPrefix, izmirRouter)
