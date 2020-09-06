@@ -1,12 +1,6 @@
-const { redisHost, redisPort, redisPassword } = require('../config')
+const { redisUrl } = require('../config')
 const Redis = require('ioredis')
 // Creates a redis connection.
-const redis = new Redis({
-	host: redisHost,
-	port: redisPort,
-	password: redisPassword,
-	family: 4, // 4 (IPv4) or 6 (IPv6).
-	db: 1,
-})
+const redis = new Redis(redisUrl)
 
 module.exports = redis
