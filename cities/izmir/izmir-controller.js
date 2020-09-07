@@ -12,16 +12,8 @@ const getPharmacies = async () => {
 		return
 	}
 
-	if (!pharmacies.length) {
+	if (!pharmacies.length || !pharmacies[0].name) {
 		throw new APIError(500, `Couldn't get the pharmacies on duty in Izmir.`)
-	}
-
-	if (!pharmacies[0].name) {
-		throw new APIError(
-			500,
-			`Couldn't get the pharmacies data for Izmir. Which means that the scraper couldn't scrape the data from html.`,
-			false
-		)
 	}
 
 	return pharmacies
@@ -41,17 +33,9 @@ const getPharmaciesByArea = async (areaCode) => {
 		return
 	}
 
-	if (!pharmacies.length) {
+	if (!pharmacies.length || !pharmacies[0].name) {
 		const area = areas.find(({ code }) => code === areaCode).name
 		throw new APIError(500, `Couldn't get the pharmacies on duty in ${area}.`)
-	}
-
-	if (!pharmacies[0].name) {
-		throw new APIError(
-			500,
-			`Couldn't get the pharmacies data for Izmir. Which means that the scraper couldn't scrape the data from html.`,
-			false
-		)
 	}
 
 	return pharmacies

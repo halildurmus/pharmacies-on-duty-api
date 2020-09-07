@@ -11,16 +11,8 @@ const getPharmacies = async () => {
 		return
 	}
 
-	if (!pharmacies.length) {
+	if (!pharmacies.length || !pharmacies[0].name) {
 		throw new APIError(500, `Couldn't get the pharmacies on duty in Istanbul.`)
-	}
-
-	if (!pharmacies[0].name) {
-		throw new APIError(
-			500,
-			`Couldn't get the pharmacies data for Istanbul. Which means that the scraper couldn't scrape the data from html.`,
-			false
-		)
 	}
 
 	return pharmacies
@@ -40,18 +32,10 @@ const getPharmaciesByDistrict = async (district) => {
 		return
 	}
 
-	if (!pharmacies.length) {
+	if (!pharmacies.length || !pharmacies[0].name) {
 		throw new APIError(
 			500,
 			`Couldn't get the pharmacies on duty in ${district}.`
-		)
-	}
-
-	if (!pharmacies[0].name) {
-		throw new APIError(
-			500,
-			`Couldn't get the pharmacies data for Istanbul. Which means that the scraper couldn't scrape the data from html.`,
-			false
 		)
 	}
 
