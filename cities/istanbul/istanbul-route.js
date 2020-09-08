@@ -38,9 +38,9 @@ router.get(
 		const district = req.params.district.toLowerCase()
 
 		if (!districts.find(({ eng }) => eng.toLowerCase() === district)) {
-			return res.status(400).json({
+			return res.status(404).json({
 				status: 'fail',
-				message: `You need to provide a valid district.`,
+				message: `Couldn't find any data for ${district}. You can check the /districts route to see the supported districts.`,
 			})
 		}
 

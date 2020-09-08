@@ -34,14 +34,16 @@ describe('API Endpoints for Istanbul', () => {
 		expect(res.body).toHaveProperty('pharmacies')
 	})
 
-	it('should respond with status code 400 if an invalid district is provided', async () => {
+	it('should respond with status code 404 if an invalid district is provided', async () => {
 		const res = await request(app)
 			.get(`${process.env.API_PREFIX}/istanbul/pharmacies/Cankaya`)
-			.expect(400)
+			.expect(404)
 		expect(res.body).toHaveProperty('status')
 		expect(res.body.status).toEqual('fail')
 		expect(res.body).toHaveProperty('message')
-		expect(res.body.message).toEqual('You need to provide a valid district.')
+		expect(res.body.message).toEqual(
+			`Couldn't find any data for cankaya. You can check the /districts route to see the supported districts.`
+		)
 	})
 
 	it('should respond with status code 400 if no district is provided', async () => {

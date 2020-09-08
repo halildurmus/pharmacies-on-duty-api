@@ -30,9 +30,9 @@ router.get(
 		const areaCode = parseInt(req.params.areaCode)
 
 		if (!areas.find(({ code }) => code === areaCode)) {
-			return res.status(400).json({
+			return res.status(404).json({
 				status: 'fail',
-				message: `You need to provide a valid area code.`,
+				message: `Couldn't find any data for area code ${areaCode}. You can check the /areas route to see the supported areas.`,
 			})
 		}
 
