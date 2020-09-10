@@ -5,6 +5,6 @@ module.exports = {
 	nodeEnv: process.env.NODE_ENV,
 	redisKeyPrefixIstanbul: process.env.REDIS_KEY_PREFIX_ISTANBUL,
 	redisKeyPrefixIzmir: process.env.REDIS_KEY_PREFIX_IZMIR,
-	redisUri: process.env.REDIS_URI,
+	redisUri: process.env.REDIS_URL,
 	swaggerJsonUrl: process.env.SWAGGER_JSON_URL,
 }
