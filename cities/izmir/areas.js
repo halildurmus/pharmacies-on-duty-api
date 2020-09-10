@@ -1,4 +1,4 @@
-exports.areas = [
+module.exports = [
 	{ code: 780, name: 'ALİAĞA' },
 	{ code: 751, name: 'ALSANCAK' },
 	{ code: 752, name: 'ALSANCAK-BASMANE' },

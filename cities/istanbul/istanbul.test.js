@@ -1,6 +1,6 @@
 const request = require('supertest')
 const getIstanbul = require('../../scrapers/getIstanbul')
-const { redis } = require('../../utils')
+const redis = require('../../db')
 const app = require('../../app')
 
 beforeAll(async () => {
@@ -15,8 +15,7 @@ describe('API Endpoints for Istanbul', () => {
 		const res = await request(app)
 			.get(`${process.env.API_PREFIX}/istanbul/districts`)
 			.expect(200)
-		expect(res.body).toHaveProperty('districts')
-		expect(Object.keys(res.body.districts).length).toEqual(39)
+		expect(Object.keys(res.body).length).toEqual(39)
 	})
 
 	it('should list the all pharmacies on duty in Istanbul', async () => {

@@ -1,32 +1,22 @@
 const express = require('express')
 const router = express.Router()
-const { APIError } = require('../../utils')
 const { catchAsync } = require('../../middlewares')
-const { districts } = require('./districts')
 const {
+	getDistricts,
 	getPharmacies,
 	getPharmaciesByDistrict,
-} = require('./istanbul-controller')
+} = require('./istanbul.controller')
 
 // GET request for listing the districts in Istanbul.
 router.get('/istanbul/districts', async (req, res) => {
-	res.json({ districts })
+	res.json(getDistricts())
 })
 
 // GET request for listing the all pharmacies on duty in Istanbul.
 router.get(
 	'/istanbul/pharmacies/all',
 	catchAsync(async (req, res) => {
-		const pharmacies = await getPharmacies()
-
-		if (!pharmacies) {
-			throw new APIError(
-				500,
-				`Couldn't get the pharmacies on duty in Istanbul.`
-			)
-		}
-
-		res.json({ pharmacies })
+		res.json({ pharmacies: await getPharmacies() })
 	})
 )
 
@@ -34,26 +24,17 @@ router.get(
 // in Istanbul.
 router.get(
 	'/istanbul/pharmacies/:district',
-	catchAsync(async (req, res, next) => {
+	catchAsync(async (req, res) => {
 		const district = req.params.district.toLowerCase()
 
-		if (!districts.find(({ eng }) => eng.toLowerCase() === district)) {
+		if (!getDistricts().find(({ eng }) => eng.toLowerCase() === district)) {
 			return res.status(404).json({
 				status: 'fail',
 				message: `Couldn't find any data for ${district}. You can check the /districts route to see the supported districts.`,
 			})
 		}
 
-		const pharmacies = await getPharmaciesByDistrict(district)
-
-		if (!pharmacies) {
-			throw new APIError(
-				500,
-				`Couldn't get the pharmacies on duty in Istanbul.`
-			)
-		}
-
-		res.json({ pharmacies })
+		res.json({ pharmacies: await getPharmaciesByDistrict(district) })
 	})
 )
 

@@ -1,12 +1,12 @@
 const { apiPrefix, swaggerJsonUrl } = require('./config')
+const { error } = require('./middlewares')
 const cors = require('cors')
 const corsOptions = { optionsSuccessStatus: 200 }
 const express = require('express')
 const hbs = require('hbs')
-const homeRouter = require('./home/home-route')
-const istanbulRouter = require('./cities/istanbul/istanbul-route')
-const izmirRouter = require('./cities/izmir/izmir-route')
-const { error } = require('./middlewares')
+const homeRouter = require('./home/home.route')
+const istanbulRouter = require('./cities/istanbul/istanbul.route')
+const izmirRouter = require('./cities/izmir/izmir.route')
 const app = express()
 const swaggerUi = require('swagger-ui-express')
 const swaggerOptions = {
@@ -17,7 +17,7 @@ const swaggerOptions = {
 
 app.use(cors(corsOptions))
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: false }))
 
 // Defines paths for express config.
 const publicDirectoryPath = './public'

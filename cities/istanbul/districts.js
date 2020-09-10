@@ -1,4 +1,4 @@
-const districts = [
+module.exports = [
 	{ eng: 'Adalar', district: 'Adalar' },
 	{ eng: 'Arnavutkoy', district: 'Arnavutköy' },
 	{ eng: 'Atasehir', district: 'Ataşehir' },
@@ -39,5 +39,3 @@ const districts = [
 	{ eng: 'Uskudar', district: 'Üsküdar' },
 	{ eng: 'Zeytinburnu', district: 'Zeytinburnu' },
 ]
-
-module.exports = { districts }

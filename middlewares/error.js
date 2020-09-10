@@ -1,4 +1,4 @@
-const { apiPrefix, nodeEnv } = require('../config')
+const { nodeEnv } = require('../config')
 const { APIError, logger } = require('../utils')
 const httpStatus = require('http-status')
 
@@ -57,15 +57,11 @@ exports.converter = (err, req, res, next) => {
 	return exports.handler(convertedError, req, res)
 }
 
-// Catch 404 and forward to error handler
+// Catch 404 and forward to error handler.
 exports.notFound = (req, res, next) => {
 	const statusCode = httpStatus.NOT_FOUND
 	const message = httpStatus['404']
 	const err = new APIError(statusCode, message)
 
-	if (req.url.startsWith(apiPrefix)) {
-		return exports.handler(err, req, res)
-	}
-
-	return res.status(statusCode).render('404', { title: message })
+	return exports.handler(err, req, res)
 }

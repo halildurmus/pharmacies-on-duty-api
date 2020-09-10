@@ -1,6 +1,7 @@
 const { redisKeyPrefixIstanbul } = require('../config')
-const { districts } = require('../cities/istanbul/districts')
-const { logger, redis } = require('../utils')
+const districts = require('../cities/istanbul/districts')
+const { logger } = require('../utils')
+const redis = require('../db')
 const cheerio = require('cheerio')
 const got = require('got')
 
@@ -95,7 +96,8 @@ const getIstanbul = async () => {
 				'ex',
 				30 * 60
 			)
-			.catch((err) => logger.error(err))
+			.then(() => logger.info(`Updated the Istanbul data.`))
+			.catch((err) => logger.error(`${err}`))
 
 		for (let i = 0; i < districts.length; i++) {
 			const pharmacies = data.filter(
@@ -110,10 +112,8 @@ const getIstanbul = async () => {
 					'ex',
 					30 * 60
 				)
-				.catch((err) => logger.error(err))
+				.catch((err) => logger.error(`${err}`))
 		}
-
-		logger.info('Updated the Istanbul data.')
 	} catch (err) {
 		if (err.name === 'SyntaxError') {
 			logger.error(

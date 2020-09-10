@@ -1,6 +1,7 @@
 const { redisKeyPrefixIzmir } = require('../config')
-const { areas } = require('../cities/izmir/areas')
-const { logger, redis } = require('../utils')
+const areas = require('../cities/izmir/areas')
+const { logger } = require('../utils')
+const redis = require('../db')
 const cheerio = require('cheerio')
 const got = require('got')
 
@@ -83,7 +84,8 @@ const getIzmir = async () => {
 				'ex',
 				30 * 60
 			)
-			.catch((err) => logger.error(err))
+			.then(() => logger.info(`Updated the Izmir data.`))
+			.catch((err) => logger.error(`${err}`))
 
 		for (let i = 0; i < areas.length; i++) {
 			const pharmacies = data.filter(
@@ -91,15 +93,15 @@ const getIzmir = async () => {
 			)
 			// Saves the cities on duty in Izmir data to redis.
 			// The data expires in 30 minutes.
-			redis.set(
-				redisKeyPrefixIzmir + areas[i].code,
-				JSON.stringify(pharmacies),
-				'ex',
-				30 * 60
-			)
+			redis
+				.set(
+					redisKeyPrefixIzmir + areas[i].code,
+					JSON.stringify(pharmacies),
+					'ex',
+					30 * 60
+				)
+				.catch((err) => logger.error(`${err}`))
 		}
-
-		logger.info('Updated the Izmir data.')
 	} catch (err) {
 		logger.error(`${err} Couldn't fetch the Izmir data.`)
 	}

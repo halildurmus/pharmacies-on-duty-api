@@ -1,4 +1,4 @@
-const logger = require('./logger')
+const { logger } = require('./')
 
 module.exports = process.on('uncaughtException', (err) => {
 	logger.error(`${err.name} ${err.message}`)

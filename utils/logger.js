@@ -2,38 +2,56 @@ const { nodeEnv } = require('../config')
 const { createLogger, format, transports } = require('winston')
 const { colorize, combine, json, printf, timestamp } = format
 
-const logger = createLogger({
-	level: 'info',
-	format: combine(
-		timestamp({
-			format: 'YYYY-MM-DD HH:mm:ss',
-		}),
-		json()
-	),
-	defaultMeta: { service: 'cities-service' },
-	transports: [
-		// - Write all logs with level `error` and below to `error.log`.
-		// - Write all logs with level `info` and below to `combined.log`.
-		new transports.File({
-			filename: './logs/error.log',
-			level: 'error',
-		}),
-		new transports.File({ filename: './logs/combined.log' }),
-	],
-})
+let instance = null
 
-// Custom format for logging to the `console`.
-const myFormat = printf(({ level, message, service, timestamp }) => {
-	return `${timestamp} ${level}: ${message} [${service}]`
-})
-
-// Log to the `console` if we're not in production.
-if (nodeEnv !== 'production') {
-	logger.add(
-		new transports.Console({
-			format: combine(timestamp(), colorize(), myFormat),
+class Logger {
+	constructor() {
+		this.logger = createLogger({
+			level: 'info',
+			format: combine(
+				timestamp({
+					format: 'YYYY-MM-DD HH:mm:ss',
+				}),
+				json()
+			),
+			defaultMeta: { service: 'pharmacies-on-duty-service' },
+			transports: [
+				// - Write all logs with level `error` and below to `error.log`.
+				// - Write all logs with level `info` and below to `combined.log`.
+				new transports.File({
+					filename: './logs/error.log',
+					level: 'error',
+				}),
+				new transports.File({ filename: './logs/combined.log' }),
+			],
 		})
-	)
+
+		// Custom format for logging to the `console`.
+		const myFormat = printf(({ level, message, service, timestamp }) => {
+			return `${timestamp} ${level}: ${message} [${service}]`
+		})
+
+		// Log to the `console` if we're not in production.
+		if (nodeEnv !== 'production') {
+			this.logger.add(
+				new transports.Console({
+					format: combine(timestamp(), colorize(), myFormat),
+				})
+			)
+		}
+	}
+
+	getLogger() {
+		return this.logger
+	}
+
+	static getInstance() {
+		if (!instance) {
+			instance = new Logger().getLogger()
+		}
+
+		return instance
+	}
 }
 
-module.exports = logger
+module.exports = Logger

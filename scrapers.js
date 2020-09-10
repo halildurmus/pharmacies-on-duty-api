@@ -4,8 +4,8 @@ const getIzmir = require('./scrapers/getIzmir')
 const { logger } = require('./utils')
 
 // Executes the Istanbul and Izmir scrapers.
-getIstanbul().catch((err) => logger.error(err))
-getIzmir().catch((err) => logger.error(err))
+getIstanbul().catch((err) => logger.error(`${err}`))
+getIzmir().catch((err) => logger.error(`${err}`))
 
 // Creates a cronjob which executes the Istanbul scraper every 30 minutes.
 const getIstanbulJob = new CronJob(

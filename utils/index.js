@@ -1,5 +1,4 @@
 module.exports = {
 	APIError: require('./APIError'),
-	logger: require('./logger'),
-	redis: require('./cache'),
+	logger: require('./logger').getInstance(),
 }
