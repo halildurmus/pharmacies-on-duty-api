@@ -33,6 +33,9 @@ app.use(express.static(publicDirectoryPath))
 // Routes
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, swaggerOptions))
 app.use(homeRouter)
+app.get(`${apiPrefix}/`, async (req, res) => {
+	res.redirect('/docs')
+})
 app.use(apiPrefix, istanbulRouter)
 app.use(apiPrefix, izmirRouter)
 

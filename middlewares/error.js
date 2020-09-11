@@ -3,7 +3,7 @@ const { APIError, logger } = require('../utils')
 const httpStatus = require('http-status')
 
 const sendErrorDev = (err, res) => {
-	logger.error('ERROR 💥: ', err)
+	logger.error('ERROR 💥:', err)
 
 	res.status(err.statusCode).json({
 		status: err.status,
@@ -24,7 +24,7 @@ const sendErrorProd = (err, res) => {
 		// Programming or other unknown error.
 	} else if (err.isOperational === false) {
 		// 1) Logs error.
-		logger.error('ERROR 💥: ', err)
+		logger.error('ERROR 💥:', err)
 
 		// 2) Sends generic response.
 		res.status(500).json({
@@ -60,7 +60,7 @@ exports.converter = (err, req, res, next) => {
 // Catch 404 and forward to error handler.
 exports.notFound = (req, res, next) => {
 	const statusCode = httpStatus.NOT_FOUND
-	const message = httpStatus['404']
+	const message = `${req.url} Route ${httpStatus['404']}`
 	const err = new APIError(statusCode, message)
 
 	return exports.handler(err, req, res)
