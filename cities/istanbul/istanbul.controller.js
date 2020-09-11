@@ -1,41 +1,49 @@
 const Repository = require('./istanbul.DAL')
 const repo = new Repository()
+const { APIError } = require('../../utils')
 
 module.exports = {
-	// Returns the all districts in Istanbul as JSON.
+	/**
+	 * Returns the all districts in Istanbul.
+	 * @returns An array or an exception.
+	 */
 	getDistricts() {
 		const data = repo.getDistricts()
-
 		if (!data) {
-			return
-		}
-
-		return data
-	},
-
-	// Returns the all pharmacies on duty data in Istanbul as JSON.
-	async getPharmacies() {
-		// Fetches the all pharmacies on duty data in Istanbul from redis.
-		const data = await repo.getPharmacies()
-
-		if (!data) {
-			return
+			throw new APIError(500, `Couldn't get the districts in Istanbul.`)
 		}
 
 		return data
 	},
 
 	/**
-	 * Returns the pharmacies on duty data for provided district in Istanbul as JSON.
+	 * Returns the all pharmacies on duty data in Istanbul.
+	 * @returns A JSON object or an exception.
+	 */
+	async getPharmacies() {
+		const data = JSON.parse(await repo.getPharmacies())
+		if (!data || !data.length || !data[0].name) {
+			throw new APIError(
+				500,
+				`Couldn't get the pharmacies on duty in Istanbul.`
+			)
+		}
+
+		return data
+	},
+
+	/**
+	 * Returns the pharmacies on duty data for provided district in Istanbul.
 	 * @param		{string} district district name
-	 * @returns	{Object}
+	 * @returns	A JSON object or an exception.
 	 */
 	async getPharmaciesByDistrict(district) {
-		// Fetches the pharmacies on duty data for provided district from redis.
 		const data = await repo.getPharmaciesByDistrict(district)
-
-		if (!data) {
-			return
+		if (!data || !data.length || !data[0].name) {
+			throw new APIError(
+				500,
+				`Couldn't get the pharmacies on duty in ${district}.`
+			)
 		}
 
 		return data

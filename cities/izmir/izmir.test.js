@@ -42,7 +42,7 @@ describe('API Endpoints for Izmir', () => {
 		expect(res.body.status).toEqual('fail')
 		expect(res.body).toHaveProperty('message')
 		expect(res.body.message).toEqual(
-			`Couldn't find any data for area code 7511. You can check the /areas route to see the supported areas.`
+			`Couldn't find any data for area code 7511. You can checkout the /areas route to see the supported areas.`
 		)
 	})
 

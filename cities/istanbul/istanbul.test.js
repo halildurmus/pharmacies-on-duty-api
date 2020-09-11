@@ -41,7 +41,7 @@ describe('API Endpoints for Istanbul', () => {
 		expect(res.body.status).toEqual('fail')
 		expect(res.body).toHaveProperty('message')
 		expect(res.body.message).toEqual(
-			`Couldn't find any data for cankaya. You can check the /districts route to see the supported districts.`
+			`Couldn't find any data for cankaya. You can checkout the /districts route to see the supported districts.`
 		)
 	})
 

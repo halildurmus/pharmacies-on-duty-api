@@ -30,7 +30,7 @@ router.get(
 		if (!getDistricts().find(({ eng }) => eng.toLowerCase() === district)) {
 			return res.status(404).json({
 				status: 'fail',
-				message: `Couldn't find any data for ${district}. You can check the /districts route to see the supported districts.`,
+				message: `Couldn't find any data for ${district}. You can checkout the /districts route to see the supported districts.`,
 			})
 		}
 

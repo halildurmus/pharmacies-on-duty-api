@@ -1,6 +1,6 @@
+const { catchAsync } = require('../../middlewares')
 const express = require('express')
 const router = express.Router()
-const { catchAsync } = require('../../middlewares')
 const {
 	getAreas,
 	getPharmacies,
@@ -28,7 +28,7 @@ router.get(
 		if (!getAreas().find(({ code }) => code === areaCode)) {
 			return res.status(404).json({
 				status: 'fail',
-				message: `Couldn't find any data for area code ${areaCode}. You can check the /areas route to see the supported areas.`,
+				message: `Couldn't find any data for area code ${areaCode}. You can checkout the /areas route to see the supported areas.`,
 			})
 		}
 

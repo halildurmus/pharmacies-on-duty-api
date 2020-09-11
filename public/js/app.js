@@ -9,11 +9,11 @@ function getPharmacies(city) {
 		if (city === 'istanbul') {
 			const district = istanbulSearch.value
 
-			return `https://pharmacies-on-duty-api.herokuapp.com/api/v1/istanbul/pharmacies/${district}`
+			return `/api/v1/istanbul/pharmacies/${district}`
 		} else if (city === 'izmir') {
 			const area = izmirSearch.value
 
-			return `https://pharmacies-on-duty-api.herokuapp.com/api/v1/izmir/pharmacies/${area}`
+			return `/api/v1/izmir/pharmacies/${area}`
 		}
 	}
 

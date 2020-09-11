@@ -1,13 +1,13 @@
-const { redisKeyPrefixIstanbul } = require('../config')
+const cheerio = require('cheerio')
 const districts = require('../cities/istanbul/districts')
+const got = require('got')
 const { logger } = require('../utils')
 const redis = require('../db')
-const cheerio = require('cheerio')
-const got = require('got')
+const { redisKeyIstanbul } = require('../config')
 
 // Scrapes the h token which is needed for scraping the pharmacies on duty
 // in Istanbul data.
-const getHToken = async () => {
+async function getHToken() {
 	try {
 		const url = 'https://www.istanbuleczaciodasi.org.tr/nobetci-eczane/'
 		const response = await got.get(url)
@@ -15,7 +15,6 @@ const getHToken = async () => {
 		const $ = cheerio.load(response.body)
 		const h = $('input#h').attr('value')
 		logger.info('Fetched the h token.')
-
 		return h
 	} catch (err) {
 		logger.error(`${err} Couldn't fetch the h token.`)
@@ -24,16 +23,17 @@ const getHToken = async () => {
 
 /**
  * Parses the provided JSON data.
- * @param 	{Object} 	data HTML data.
- * @returns {Array} 	Pharmacies on duty in Istanbul.
+ * @param 	{Object}	data HTML data.
+ * @returns An array which contains the pharmacies on duty in Istanbul.
  */
-const fillResult = (data) => {
+function fillResult(data) {
 	const { eczaneler } = data
 	const pharmaciesData = eczaneler.filter(({ il }) => il === 'İstanbul')
 
 	const pharmacies = []
 	pharmaciesData.forEach((obj) => {
-		const district = obj.ilce
+		const districtEng = districts.find(({ district }) => district === obj.ilce)
+			.eng
 		const name = obj.eczane_ad
 		const phone = obj.eczane_tel
 		const address = obj.mahalle + ' ' + obj.cadde_sokak + ' ' + obj.bina_kapi
@@ -42,7 +42,7 @@ const fillResult = (data) => {
 		const lon = obj.lng
 
 		pharmacies.push({
-			district,
+			district: districtEng,
 			name,
 			phone,
 			address,
@@ -55,10 +55,9 @@ const fillResult = (data) => {
 }
 
 // Scrapes the pharmacies on duty in Istanbul data and saves it to redis.
-const getIstanbul = async () => {
+async function getIstanbul() {
 	try {
 		const h = await getHToken()
-
 		if (!h) {
 			logger.error(`Couldn't fetch the h token.`)
 			return
@@ -73,9 +72,7 @@ const getIstanbul = async () => {
 		}
 		const body = `jx=1&islem=get_eczane_markers&h=${h}`
 		const response = await got.post(url, { headers, body })
-
 		const data = fillResult(JSON.parse(response.body))
-
 		if (!data || !data.length) {
 			logger.error(`Couldn't parse the Istanbul data.`)
 			return
@@ -85,7 +82,7 @@ const getIstanbul = async () => {
 		// The data expires in 30 minutes.
 		redis
 			.set(
-				redisKeyPrefixIstanbul + 'all',
+				redisKeyIstanbul,
 				JSON.stringify(
 					data.sort((a, b) =>
 						a.district.toLocaleUpperCase() < b.district.toLocaleUpperCase()
@@ -98,34 +95,8 @@ const getIstanbul = async () => {
 			)
 			.then(() => logger.info(`Updated the Istanbul data.`))
 			.catch((err) => logger.error(`${err}`))
-
-		for (let i = 0; i < districts.length; i++) {
-			const pharmacies = data.filter(
-				({ district }) => district === districts[i].district
-			)
-			// Saves the pharmacies on duty in Istanbul data to redis.
-			// The data expires in 30 minutes.
-			redis
-				.set(
-					redisKeyPrefixIstanbul + districts[i].eng.toLowerCase(),
-					JSON.stringify(pharmacies),
-					'ex',
-					30 * 60
-				)
-				.catch((err) => logger.error(`${err}`))
-		}
 	} catch (err) {
-		if (err.name === 'SyntaxError') {
-			logger.error(
-				`${err} Got HTML response instead of JSON when fetching the Istanbul data.`
-			)
-		} else if (err.name === 'TypeError') {
-			logger.error(
-				`${err} Couldn't fetch the Istanbul data There may be an issue with the h token.`
-			)
-		} else {
-			logger.error(`${err} Couldn't fetch the Istanbul data.`)
-		}
+		logger.error(`${err} Couldn't fetch the Istanbul data.`)
 	}
 }
 

@@ -1,12 +1,11 @@
 const areas = require('./areas')
 const redis = require('../../db')
-const { APIError } = require('../../utils')
-const { redisKeyPrefixIzmir } = require('../../config')
+const { redisKeyIzmir } = require('../../config')
 
 class IzmirRepository {
 	constructor(redisDb, redisKey) {
 		this.redis = redisDb || redis
-		this.redisKeyPrefix = redisKey || redisKeyPrefixIzmir
+		this.redisKey = redisKey || redisKeyIzmir
 	}
 
 	getAreas() {
@@ -14,34 +13,16 @@ class IzmirRepository {
 	}
 
 	async getPharmacies() {
-		const data = await this.redis.get(this.redisKeyPrefix + 'all')
-		const pharmacies = JSON.parse(data)
-
-		if (!data) {
-			return
-		}
-
-		if (!pharmacies.length || !pharmacies[0].name) {
-			throw new APIError(500, `Couldn't get the pharmacies on duty in Izmir.`)
-		}
-
-		return pharmacies
+		return await this.redis.get(this.redisKey)
 	}
 
 	async getPharmaciesByArea(areaCode) {
-		const data = await this.redis.get(this.redisKeyPrefix + areaCode)
-		const pharmacies = JSON.parse(data)
-
+		const data = JSON.parse(await this.redis.get(this.redisKey))
 		if (!data) {
 			return
 		}
 
-		if (!pharmacies.length || !pharmacies[0].name) {
-			const area = areas.find(({ code }) => code === areaCode).name
-			throw new APIError(500, `Couldn't get the pharmacies on duty in ${area}.`)
-		}
-
-		return JSON.parse(data)
+		return data.filter((p) => p.areaCode === areaCode)
 	}
 }
 

@@ -1,12 +1,11 @@
 const districts = require('./districts')
 const redis = require('../../db')
-const { APIError } = require('../../utils')
-const { redisKeyPrefixIstanbul } = require('../../config')
+const { redisKeyIstanbul } = require('../../config')
 
 class IstanbulRepository {
 	constructor(redisDb, redisKey) {
 		this.redis = redisDb || redis
-		this.redisKeyPrefix = redisKey || redisKeyPrefixIstanbul
+		this.redisKey = redisKey || redisKeyIstanbul
 	}
 
 	getDistricts() {
@@ -14,39 +13,16 @@ class IstanbulRepository {
 	}
 
 	async getPharmacies() {
-		const data = await this.redis.get(this.redisKeyPrefix + 'all')
-		const pharmacies = JSON.parse(data)
-
-		if (!data) {
-			return
-		}
-
-		if (!pharmacies.length || !pharmacies[0].name) {
-			throw new APIError(
-				500,
-				`Couldn't get the pharmacies on duty in Istanbul.`
-			)
-		}
-
-		return pharmacies
+		return await this.redis.get(this.redisKey)
 	}
 
 	async getPharmaciesByDistrict(district) {
-		const data = await this.redis.get(this.redisKeyPrefix + district)
-		const pharmacies = JSON.parse(data)
-
+		const data = JSON.parse(await this.redis.get(this.redisKey))
 		if (!data) {
 			return
 		}
 
-		if (!pharmacies.length || !pharmacies[0].name) {
-			throw new APIError(
-				500,
-				`Couldn't get the pharmacies on duty in ${district}.`
-			)
-		}
-
-		return JSON.parse(data)
+		return data.filter((p) => p.district.toLowerCase() === district)
 	}
 }
 
