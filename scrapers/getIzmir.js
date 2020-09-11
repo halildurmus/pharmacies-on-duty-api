@@ -1,7 +1,7 @@
 const areas = require('../cities/izmir/areas')
 const cheerio = require('cheerio')
 const got = require('got')
-const { logger } = require('../utils')
+const logger = require('../utils').loggers.loggerScraper
 const redis = require('../db')
 const { redisKeyIzmir } = require('../config')
 

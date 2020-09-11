@@ -1,57 +1,47 @@
 const { nodeEnv } = require('../config')
-const { createLogger, format, transports } = require('winston')
+const { format, loggers, transports } = require('winston')
 const { colorize, combine, json, printf, timestamp } = format
-
-let instance = null
-
-class Logger {
-	constructor() {
-		this.logger = createLogger({
-			level: 'info',
-			format: combine(
-				timestamp({
-					format: 'YYYY-MM-DD HH:mm:ss',
-				}),
-				json()
-			),
-			defaultMeta: { service: 'pharmacies-on-duty-service' },
-			transports: [
-				// - Write all logs with level `error` and below to `error.log`.
-				// - Write all logs with level `info` and below to `combined.log`.
-				new transports.File({
-					filename: './logs/error.log',
-					level: 'error',
-				}),
-				new transports.File({ filename: './logs/combined.log' }),
-			],
-		})
-
-		// Custom format for logging to the `console`.
-		const myFormat = printf(({ level, message, service, timestamp }) => {
-			return `${timestamp} ${level}: ${message} [${service}]`
-		})
-
-		// Log to the `console` if we're not in production.
-		if (nodeEnv !== 'production') {
-			this.logger.add(
-				new transports.Console({
-					format: combine(timestamp(), colorize(), myFormat),
-				})
-			)
-		}
-	}
-
-	getLogger() {
-		return this.logger
-	}
-
-	static getInstance() {
-		if (!instance) {
-			instance = new Logger().getLogger()
-		}
-
-		return instance
+const loggerOptions = (service = 'server') => {
+	return {
+		level: 'info',
+		format: combine(
+			timestamp({
+				format: 'YYYY-MM-DD HH:mm:ss',
+			}),
+			json()
+		),
+		defaultMeta: { service },
+		transports: [
+			// - Write all logs with level `error` and below to `error.log`.
+			// - Write all logs with level `info` and below to `combined.log`.
+			new transports.File({
+				filename: './logs/error.log',
+				level: 'error',
+			}),
+			new transports.File({ filename: './logs/combined.log' }),
+		],
 	}
 }
 
-module.exports = Logger
+const loggerRedis = loggers.add('redis', loggerOptions('redis'))
+const loggerScraper = loggers.add('scraper', loggerOptions('scraper'))
+const loggerServer = loggers.add('server', loggerOptions())
+
+// Custom format for logging to the `console`.
+const myFormat = printf(({ level, message, service, timestamp }) => {
+	return `${timestamp} ${level}: ${message} [${service}]`
+})
+
+// Log to the `console` if we're not in production.
+if (nodeEnv !== 'production') {
+	const transportConsole = new transports.Console({
+		format: combine(timestamp(), colorize(), myFormat),
+	})
+	loggerRedis.add(transportConsole)
+	loggerScraper.add(transportConsole)
+	loggerServer.add(transportConsole)
+}
+
+module.exports.loggerRedis = loggers.get('redis')
+module.exports.loggerScraper = loggers.get('scraper')
+module.exports.loggerServer = loggers.get('server')

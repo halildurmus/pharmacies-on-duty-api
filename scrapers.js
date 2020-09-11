@@ -1,7 +1,7 @@
 const CronJob = require('cron').CronJob
 const getIstanbul = require('./scrapers/getIstanbul')
 const getIzmir = require('./scrapers/getIzmir')
-const { logger } = require('./utils')
+const logger = require('./utils').loggers.loggerScraper
 
 // Executes the Istanbul and Izmir scrapers.
 getIstanbul().catch((err) => logger.error(`${err}`))

@@ -1,4 +1,4 @@
-const { logger } = require('../utils')
+const logger = require('../utils').loggers.loggerRedis
 const { redisUri } = require('../config')
 const Redis = require('ioredis')
 const redis = new Redis(redisUri)
