@@ -1,6 +1,6 @@
-const Repository = require('./izmir.DAL')
-const repo = new Repository()
-const { APIError } = require('../../utils')
+const { APIError } = require('../../helpers')
+const Service = require('./izmir.service')
+const repo = new Service()
 const areas = require('./areas')
 
 module.exports = {
@@ -37,8 +37,15 @@ module.exports = {
 	 */
 	async getPharmaciesByArea(areaCode) {
 		const data = await repo.getPharmaciesByArea(areaCode)
-		if (!data || !data.length || !data[0].name) {
+		if (!data || !data.length) {
 			const area = areas.find(({ code }) => code === areaCode).name
+			if (data.length === 0) {
+				throw new APIError(
+					404,
+					`Couldn't find any pharmacies on duty in ${area}`
+				)
+			}
+
 			throw new APIError(500, `Couldn't get the pharmacies on duty in ${area}.`)
 		}
 

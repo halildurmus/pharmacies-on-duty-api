@@ -1,5 +1,5 @@
 const cheerio = require('cheerio')
-const districts = require('../cities/istanbul/districts')
+const districts = require('../components/istanbul/districts')
 const got = require('got')
 const logger = require('../utils').loggers.loggerScraper
 const redis = require('../db')

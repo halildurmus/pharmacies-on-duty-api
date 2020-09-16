@@ -1,4 +1,4 @@
-const areas = require('../cities/izmir/areas')
+const areas = require('../components/izmir/areas')
 const cheerio = require('cheerio')
 const got = require('got')
 const logger = require('../utils').loggers.loggerScraper

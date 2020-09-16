@@ -2,7 +2,7 @@ const areas = require('./areas')
 const redis = require('../../db')
 const { redisKeyIzmir } = require('../../config')
 
-class IzmirRepository {
+class IzmirService {
 	constructor(redisDb, redisKey) {
 		this.redis = redisDb || redis
 		this.redisKey = redisKey || redisKeyIzmir
@@ -26,4 +26,4 @@ class IzmirRepository {
 	}
 }
 
-module.exports = IzmirRepository
+module.exports = IzmirService
