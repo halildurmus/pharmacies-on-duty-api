@@ -33,11 +33,27 @@ app.use(express.static(publicDirectoryPath))
 // Routes
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, swaggerOptions))
 app.use(homeRouter)
+app.use(apiPrefix, istanbulRouter)
+app.use(apiPrefix, izmirRouter)
+
 app.get(`${apiPrefix}/`, async (req, res) => {
 	res.redirect('/docs')
 })
-app.use(apiPrefix, istanbulRouter)
-app.use(apiPrefix, izmirRouter)
+
+app.get('/health', async (req, res) => {
+	const healthCheck = {
+		message: 'OK',
+		uptime: process.uptime(),
+		timestamp: Date.now(),
+	}
+
+	try {
+		res.send(healthCheck)
+	} catch (e) {
+		healthCheck.message = e
+		res.status(503).send()
+	}
+})
 
 // If the error is not an instanceOf APIError, convert it.
 app.use(error.converter)
