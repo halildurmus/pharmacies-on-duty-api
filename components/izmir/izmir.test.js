@@ -1,14 +1,14 @@
-const app = require('../../app')
-const getIzmir = require('../../scrapers/getIzmir')
-const { redis } = require('../../db')
-const request = require('supertest')
-
-beforeAll(async () => {
-	redis.flushall()
-	await getIzmir()
+// Mock error handler middleware.
+const { error } = require('../../middlewares')
+error.handler = jest.fn((err, req, res, next) => {
+	res.status(err.statusCode).json({
+		status: err.status,
+		message: err.message,
+	})
 })
 
-afterAll(() => redis.flushall())
+const app = require('../../app')
+const request = require('supertest')
 
 describe('API Endpoints for Izmir', () => {
 	it('should list the areas in Izmir', async () => {
