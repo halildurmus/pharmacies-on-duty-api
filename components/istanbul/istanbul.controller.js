@@ -9,6 +9,7 @@ module.exports = {
 	 */
 	getDistricts() {
 		const data = repo.getDistricts()
+
 		if (!data) {
 			throw new APIError(500, `Couldn't get the districts in Istanbul.`)
 		}
@@ -22,6 +23,7 @@ module.exports = {
 	 */
 	async getPharmacies() {
 		const data = JSON.parse(await repo.getPharmacies())
+
 		if (!data || !data.length || !data[0].name) {
 			throw new APIError(
 				500,
@@ -39,6 +41,7 @@ module.exports = {
 	 */
 	async getPharmaciesByDistrict(district) {
 		const data = await repo.getPharmaciesByDistrict(district)
+
 		if (!data || !data.length || !data[0].name) {
 			throw new APIError(
 				500,

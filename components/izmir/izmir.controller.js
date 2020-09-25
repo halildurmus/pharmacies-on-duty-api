@@ -10,6 +10,7 @@ module.exports = {
 	 */
 	getAreas() {
 		const data = repo.getAreas()
+
 		if (!data) {
 			throw new APIError(500, `Couldn't get the areas in Izmir.`)
 		}
@@ -23,6 +24,7 @@ module.exports = {
 	 */
 	async getPharmacies() {
 		const data = JSON.parse(await repo.getPharmacies())
+
 		if (!data || !data.length || !data[0].name) {
 			throw new APIError(500, `Couldn't get the pharmacies on duty in Izmir.`)
 		}
@@ -37,8 +39,10 @@ module.exports = {
 	 */
 	async getPharmaciesByArea(areaCode) {
 		const data = await repo.getPharmaciesByArea(areaCode)
+
 		if (!data || !data.length) {
 			const area = areas.find(({ code }) => code === areaCode).name
+
 			if (data.length === 0) {
 				throw new APIError(
 					404,

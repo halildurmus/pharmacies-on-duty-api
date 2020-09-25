@@ -2,7 +2,7 @@ const cheerio = require('cheerio')
 const districts = require('../components/istanbul/districts')
 const got = require('got')
 const logger = require('../utils').loggers.loggerScraper
-const redis = require('../db')
+const { redis } = require('../db')
 const { redisKeyIstanbul } = require('../config')
 
 // Scrapes the h token which is needed for scraping the pharmacies on duty

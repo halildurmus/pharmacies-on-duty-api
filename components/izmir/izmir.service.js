@@ -1,5 +1,5 @@
 const areas = require('./areas')
-const redis = require('../../db')
+const { redis } = require('../../db')
 const { redisKeyIzmir } = require('../../config')
 
 class IzmirService {
@@ -17,12 +17,15 @@ class IzmirService {
 	}
 
 	async getPharmaciesByArea(areaCode) {
-		const data = JSON.parse(await this.redis.get(this.redisKey))
+		const data = await this.redis.get(this.redisKey)
+
 		if (!data) {
 			return
 		}
 
-		return data.filter((p) => p.areaCode === areaCode)
+		const pharmacies = JSON.parse(data)
+
+		return pharmacies.filter((p) => p.areaCode === areaCode)
 	}
 }
 

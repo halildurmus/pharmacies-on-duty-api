@@ -1,7 +1,7 @@
-const request = require('supertest')
-const getIzmir = require('../../scrapers/getIzmir')
-const redis = require('../../db')
 const app = require('../../app')
+const getIzmir = require('../../scrapers/getIzmir')
+const { redis } = require('../../db')
+const request = require('supertest')
 
 beforeAll(async () => {
 	redis.flushall()
@@ -26,12 +26,12 @@ describe('API Endpoints for Izmir', () => {
 		expect(Object.keys(res.body.pharmacies).length).toBeGreaterThan(50)
 	})
 
-	it('should list the pharmacies on duty in Alsancak', async () => {
+	it('should list the pharmacies on duty in Bornova 1', async () => {
 		const res = await request(app)
-			.get(`${process.env.API_PREFIX}/izmir/pharmacies/751`)
+			.get(`${process.env.API_PREFIX}/izmir/pharmacies/584`)
 			.expect(200)
 		expect(res.body).toHaveProperty('pharmacies')
-		expect(res.body.pharmacies[0].areaCode).toEqual(751)
+		expect(res.body.pharmacies[0].areaCode).toEqual(584)
 	})
 
 	it('should respond with status code 404 if an invalid area code is provided', async () => {

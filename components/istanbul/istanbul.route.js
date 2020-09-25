@@ -8,9 +8,12 @@ const {
 } = require('./istanbul.controller')
 
 // GET request for listing the districts in Istanbul.
-router.get('/istanbul/districts', async (req, res) => {
-	res.json(getDistricts())
-})
+router.get(
+	'/istanbul/districts',
+	catchAsync(async (req, res) => {
+		res.json(getDistricts())
+	})
+)
 
 // GET request for listing the all pharmacies on duty in Istanbul.
 router.get(
