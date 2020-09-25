@@ -36,7 +36,7 @@ function getPharmacies(city) {
 									   <h3>${pharmacy.name}</h3>
 									 	 <div class="card-member"><b>Phone:</b>   ${pharmacy.phone} </div>
 									 	 <div class="card-member"><b>Address:</b> ${pharmacy.address} </div>
-									 	 <div class="card-maps"><a href="https://www.google.com/maps/search/?api=1&query=${pharmacy.coordinates[0]},${pharmacy.coordinates[1]}" target="_blank"><b>See in Google Maps</b></a></div>
+									 	 <div class="card-maps"><a href="https://www.google.com/maps/search/?api=1&query=${pharmacy.coordinates.lat},${pharmacy.coordinates.lon}" target="_blank"><b>See in Google Maps</b></a></div>
 									 </div>`
 				})
 				pharmacies.insertAdjacentHTML('beforeend', html)
