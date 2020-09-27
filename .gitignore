@@ -1,5 +1,8 @@
 /.idea/
+/.scannerwork/
 /logs/
 /node_modules/
 .env
-/.scannerwork/
+.env.development
+.env.production
+.env.test
