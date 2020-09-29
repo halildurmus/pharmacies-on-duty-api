@@ -1,6 +1,5 @@
 const { APIError } = require('../../helpers')
-const Service = require('./istanbul.service')
-const repo = new Service()
+const service = require('./istanbul.service')
 
 module.exports = {
 	/**
@@ -8,7 +7,7 @@ module.exports = {
 	 * @returns An array or an exception.
 	 */
 	getDistricts() {
-		const data = repo.getDistricts()
+		const data = service.getDistricts()
 
 		if (!data) {
 			throw new APIError(500, `Couldn't get the districts in Istanbul.`)
@@ -22,7 +21,7 @@ module.exports = {
 	 * @returns A JSON object or an exception.
 	 */
 	async getPharmacies() {
-		const data = JSON.parse(await repo.getPharmacies())
+		const data = JSON.parse(await service.getPharmacies())
 
 		if (!data || !data.length || !data[0].name) {
 			throw new APIError(
@@ -40,7 +39,7 @@ module.exports = {
 	 * @returns	A JSON object or an exception.
 	 */
 	async getPharmaciesByDistrict(district) {
-		const data = await repo.getPharmaciesByDistrict(district)
+		const data = await service.getPharmaciesByDistrict(district)
 
 		if (!data || !data.length || !data[0].name) {
 			throw new APIError(

@@ -1,6 +1,5 @@
 const { APIError } = require('../../helpers')
-const Service = require('./izmir.service')
-const repo = new Service()
+const service = require('./izmir.service')
 const areas = require('./areas')
 
 module.exports = {
@@ -9,7 +8,7 @@ module.exports = {
 	 * @returns An array or an exception.
 	 */
 	getAreas() {
-		const data = repo.getAreas()
+		const data = service.getAreas()
 
 		if (!data) {
 			throw new APIError(500, `Couldn't get the areas in Izmir.`)
@@ -23,7 +22,7 @@ module.exports = {
 	 * @returns A JSON object or an exception.
 	 */
 	async getPharmacies() {
-		const data = JSON.parse(await repo.getPharmacies())
+		const data = JSON.parse(await service.getPharmacies())
 
 		if (!data || !data.length || !data[0].name) {
 			throw new APIError(500, `Couldn't get the pharmacies on duty in Izmir.`)
@@ -38,7 +37,7 @@ module.exports = {
 	 * @returns A JSON object or an exception.
 	 */
 	async getPharmaciesByArea(areaCode) {
-		const data = await repo.getPharmaciesByArea(areaCode)
+		const data = await service.getPharmaciesByArea(areaCode)
 
 		if (!data || !data.length) {
 			const area = areas.find(({ code }) => code === areaCode).name

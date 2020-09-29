@@ -2,22 +2,17 @@ const areas = require('./areas')
 const { redis } = require('../../db')
 const { redisKeyIzmir } = require('../../config')
 
-class IzmirService {
-	constructor(redisDb, redisKey) {
-		this.redis = redisDb || redis
-		this.redisKey = redisKey || redisKeyIzmir
-	}
-
+module.exports = {
 	getAreas() {
 		return areas
-	}
+	},
 
 	async getPharmacies() {
-		return await this.redis.get(this.redisKey)
-	}
+		return await redis.get(redisKeyIzmir)
+	},
 
 	async getPharmaciesByArea(areaCode) {
-		const data = await this.redis.get(this.redisKey)
+		const data = await redis.get(redisKeyIzmir)
 
 		if (!data) {
 			return
@@ -26,7 +21,5 @@ class IzmirService {
 		const pharmacies = JSON.parse(data)
 
 		return pharmacies.filter((p) => p.areaCode === areaCode)
-	}
+	},
 }
-
-module.exports = IzmirService

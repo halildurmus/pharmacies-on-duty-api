@@ -2,22 +2,17 @@ const districts = require('./districts')
 const { redis } = require('../../db')
 const { redisKeyIstanbul } = require('../../config')
 
-class IstanbulService {
-	constructor(redisDb, redisKey) {
-		this.redis = redisDb || redis
-		this.redisKey = redisKey || redisKeyIstanbul
-	}
-
+module.exports = {
 	getDistricts() {
 		return districts
-	}
+	},
 
 	async getPharmacies() {
-		return await this.redis.get(this.redisKey)
-	}
+		return await redis.get(redisKeyIstanbul)
+	},
 
 	async getPharmaciesByDistrict(district) {
-		const data = await this.redis.get(this.redisKey)
+		const data = await redis.get(redisKeyIstanbul)
 
 		if (!data) {
 			return
@@ -26,7 +21,5 @@ class IstanbulService {
 		const pharmacies = JSON.parse(data)
 
 		return pharmacies.filter((p) => p.district.toLowerCase() === district)
-	}
+	},
 }
-
-module.exports = IstanbulService
