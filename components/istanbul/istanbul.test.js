@@ -1,12 +1,3 @@
-// Mock error handler middleware.
-const { error } = require('../../middlewares')
-error.handler = jest.fn((err, req, res, next) => {
-	res.status(err.statusCode).json({
-		status: err.status,
-		message: err.message,
-	})
-})
-
 const app = require('../../app')
 const request = require('supertest')
 
