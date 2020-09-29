@@ -5,11 +5,10 @@
 	"main": "server.js",
 	"scripts": {
 		"start": "concurrently --kill-others-on-fail --kill-others \"npm:start:scraper\" \"npm:start:server\"",
-		"start:dev": "concurrently --kill-others-on-fail --kill-others \"npm:start:devscraper\" \"npm:start:devserver\"",
-		"start:devscraper": "set NODE_ENV=development&& node scrapers.js",
-		"start:devserver": "set NODE_ENV=development&& nodemon server.js",
-		"start:scraper": "set NODE_ENV=production&& node scrapers.js",
-		"start:server": "set NODE_ENV=production&& node server.js",
+		"start:dev": "concurrently --kill-others-on-fail --kill-others \"npm:start:scraper\" \"npm:start:devserver\"",
+		"start:devserver": "nodemon server.js",
+		"start:scraper": "node scrapers.js",
+		"start:server": "node server.js",
 		"test": "set NODE_ENV=test&& jest --watchAll --runInBand"
 	},
 	"author": "Halil Ibrahim Durmus",
