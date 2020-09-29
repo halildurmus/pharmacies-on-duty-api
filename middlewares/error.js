@@ -41,10 +41,10 @@ exports.handler = (err, req, res, next) => {
 	err.statusCode = err.statusCode || 500
 	err.status = err.status || 'error'
 
-	if (nodeEnv === 'development' || nodeEnv === 'test') {
-		sendErrorDev(err, res)
-	} else if (nodeEnv === 'production') {
+	if (nodeEnv === 'production' || nodeEnv === 'test') {
 		sendErrorProd(err, res)
+	} else {
+		sendErrorDev(err, res)
 	}
 }
 
