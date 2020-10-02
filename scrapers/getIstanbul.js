@@ -83,13 +83,7 @@ async function getIstanbul() {
 		redis
 			.set(
 				redisKeyIstanbul,
-				JSON.stringify(
-					data.sort((a, b) =>
-						a.district.toLocaleUpperCase() < b.district.toLocaleUpperCase()
-							? -1
-							: 1
-					)
-				),
+				JSON.stringify(data.sort((a, b) => (a.district < b.district ? -1 : 1))),
 				'ex',
 				30 * 60
 			)

@@ -20,6 +20,6 @@ module.exports = {
 
 		const pharmacies = JSON.parse(data)
 
-		return pharmacies.filter((p) => p.district.toLowerCase() === district)
+		return pharmacies.filter((p) => p.district === district)
 	},
 }

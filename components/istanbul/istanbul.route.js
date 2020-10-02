@@ -30,7 +30,7 @@ router.get(
 	catchAsync(async (req, res) => {
 		const district = req.params.district.toLowerCase()
 
-		if (!getDistricts().find(({ eng }) => eng.toLowerCase() === district)) {
+		if (!getDistricts().find(({ eng }) => eng === district)) {
 			return res.status(404).json({
 				status: 'fail',
 				message: `Couldn't find any data for ${district}. You can checkout the /districts route to see the supported districts.`,
