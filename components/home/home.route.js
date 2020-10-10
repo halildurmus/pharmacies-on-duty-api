@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const name = 'Halil İbrahim Durmuş'
-const github = 'https://github.com/ibrahim39'
+const github = 'https://github.com/halildurmus'
 
 // GET request for displaying home page.
 router.get('/', (req, res) => {

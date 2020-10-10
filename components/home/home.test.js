@@ -1,5 +1,5 @@
 const request = require('supertest')
-const app = require('../app')
+const app = require('../../app')
 
 it('should respond with status code 200', async () => {
 	app.set('views', './templates/views')
