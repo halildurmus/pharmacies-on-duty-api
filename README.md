@@ -73,7 +73,7 @@ Feel free to check [issues page](https://github.com/halildurmus/pharmacies-on-du
 
 ## Author
 
-👤 **İbrahim Durmuş**
+👤 **Halil İbrahim Durmuş**
 
 - Github: [@halildurmus](https://github.com/halildurmus)
 
