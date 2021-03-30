@@ -14,21 +14,13 @@ function fillResult(html) {
 	const pharmacies = []
 	const $ = cheerio.load(html)
 	$('tbody > tr').each((i, elem) => {
-		const area = $(elem)
-			.find('td')
-			.first()
-			.clone()
-			.children()
-			.remove()
-			.end()
-			.text()
-			.trim()
+		const area = $(elem).find('td:first').get(0).children[0].data.trim()
 		const areaCode = areas.find(({ name }) => name === area).code
-		const name = $(elem).find('td').first().next().text().trim()
-		const phone = $(elem).find('td').first().next().next().next().text().trim()
-		const address = $(elem).find('td').first().next().next().text().trim()
-		const lat = $(elem).find('td').last().children().next().attr('value')
-		const lon = $(elem).find('td').last().children().next().next().attr('value')
+		const name = $(elem).find('td:first').next().text().trim()
+		const phone = $(elem).find('td:first').next().next().next().text().trim()
+		const address = $(elem).find('td:first').next().next().text().trim()
+		const lat = $(elem).find('td:last').children().next().attr('value')
+		const lon = $(elem).find('td:last').children().next().next().attr('value')
 
 		pharmacies.push({
 			area,
@@ -49,6 +41,7 @@ async function getIzmir() {
 		const url = 'https://www.izmir.bel.tr/tr/NobetciEczane/27'
 		const response = await got.get(url)
 		const data = fillResult(response.body)
+
 		if (!data || !data.length) {
 			logger.error(`Couldn't parse the Izmir data.`)
 			return

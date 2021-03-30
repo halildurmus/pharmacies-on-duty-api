@@ -11,7 +11,6 @@ async function getHToken() {
 	try {
 		const url = 'https://www.istanbuleczaciodasi.org.tr/nobetci-eczane/'
 		const response = await got.get(url)
-
 		const $ = cheerio.load(response.body)
 		const h = $('input#h').attr('value')
 		logger.info('Fetched the h token.')
@@ -58,6 +57,7 @@ function fillResult(data) {
 async function getIstanbul() {
 	try {
 		const h = await getHToken()
+
 		if (!h) {
 			logger.error(`Couldn't fetch the h token.`)
 			return
@@ -73,6 +73,7 @@ async function getIstanbul() {
 		const body = `jx=1&islem=get_eczane_markers&h=${h}`
 		const response = await got.post(url, { headers, body })
 		const data = fillResult(JSON.parse(response.body))
+
 		if (!data || !data.length) {
 			logger.error(`Couldn't parse the Istanbul data.`)
 			return
